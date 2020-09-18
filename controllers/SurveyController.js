@@ -63,13 +63,12 @@ exports.survey = [
  * @returns {Object}
  */
 exports.getSurvey = [
-	auth,
 	(req, res) => {
 		if(!mongoose.Types.ObjectId.isValid(req.params.id)){
 			return apiResponse.successResponseWithData(res, "Operation success", {});
 		}
 		try {
-			Survey.findOne({ _id: req.params.id, user: req.user._id }).then((data)=>{                
+			Survey.findOne({ _id: req.params.id }).then((data)=>{                
 				if(data !== null){
 					let surveyData = new SurveyData(data);
 					return apiResponse.successResponseWithData(res, "Operation success", surveyData);

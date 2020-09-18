@@ -132,8 +132,7 @@ exports.getSurveyResult = [
 /**
  * Result update.
  * 
- * @param {JSON} data 
- * @param {string} description
+ * @param {JSON} data
  * 
  * @returns {Object}
  */

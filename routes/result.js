@@ -3,7 +3,7 @@ const ResultController = require("../controllers/ResultController");
 
 var router = express.Router();
 
-router.get("/", ResultController.getSurveyResult);
+router.get("/survey/:surveyid", ResultController.getSurveyResult);
 router.get("/:id", ResultController.getResult);
 router.post("/create", ResultController.result);
 router.put("/:id", ResultController.updateResult);
