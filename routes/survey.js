@@ -6,6 +6,7 @@ var router = express.Router();
 router.get("/", SurveyController.getUserSurvey);
 router.get("/:id", SurveyController.getSurvey);
 router.post("/create", SurveyController.survey);
+router.post("/sendSurveySms", SurveyController.sendSurveySms);
 router.put("/:id", SurveyController.surveyUpdate);
 router.delete("/:id", SurveyController.surveyDelete);
 

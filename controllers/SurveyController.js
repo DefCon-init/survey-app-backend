@@ -2,6 +2,7 @@ const Survey = require("../models/SurveyModel");
 const { body, validationResult } = require("express-validator");
 const { sanitizeBody } = require("express-validator");
 const apiResponse = require("../helpers/apiResponse");
+const sms = require("../helpers/sms");
 const auth = require("../middlewares/jwt");
 var mongoose = require("mongoose");
 var decode = require("unescape");
@@ -196,6 +197,45 @@ exports.surveyDelete = [
 					}
 				}
 			});
+		} catch (err) {
+			//throw error in json response with status 500. 
+			return apiResponse.ErrorResponse(res, err);
+		}
+	}
+];
+
+/**
+ * Send Survey Sms.
+ * 
+ * @param {string} phonecsv
+ * 
+ * @returns {Object}
+ */
+exports.sendSurveySms = [
+	auth,
+	body("phonecsv")
+		.isLength({ min: 1 })
+		.trim()
+		.withMessage("Phonecsv must not be empty.")
+		.isString()
+		.withMessage("Phonecsv must be a valid string."),
+	body("surveylink")
+		.isLength({ min: 1 })
+		.trim()
+		.withMessage("Surveylink must not be empty."),
+	sanitizeBody("*").escape(),
+	(req, res) => {
+		try {
+			const errors = validationResult(req);
+			if (!errors.isEmpty()) {
+				return apiResponse.validationErrorWithData(res, "Validation Error.", errors.array());
+			} else {
+				console.log(req.body);
+				let smsText = `Please fill this survey - ${req.body.surveylink}`;
+				sms.sendSms(req.body.phonecsv, smsText)
+					.then(msg => apiResponse.successResponseWithData(res, "Operation success", msg))
+					.catch(err => apiResponse.ErrorResponse(res, err));
+			}
 		} catch (err) {
 			//throw error in json response with status 500. 
 			return apiResponse.ErrorResponse(res, err);
