@@ -18,12 +18,12 @@ const jwt = require("jsonwebtoken");
  */
 exports.register = [
 	// Validate fields.
-	body("usename")
+	body("username")
 		.isLength({ min: 1 })
 		.trim()
-		.withMessage("Last name must be specified.")
+		.withMessage("Username name must be specified.")
 		.isAlphanumeric()
-		.withMessage("Last name has non-alphanumeric characters."),
+		.withMessage("Username name has non-alphanumeric characters."),
 	body("email")
 		.isLength({ min: 1 })
 		.trim()
@@ -64,7 +64,7 @@ exports.register = [
 		.isNumeric()
 		.withMessage("Age must be number."),
 	// Sanitize fields.
-	sanitizeBody("usename").escape(),
+	sanitizeBody("username").escape(),
 	sanitizeBody("email").escape(),
 	sanitizeBody("password").escape(),
 	sanitizeBody("callingcode").escape(),
@@ -84,7 +84,7 @@ exports.register = [
 				bcrypt.hash(req.body.password, 10, function(err, hash) {
 					// Create User object with escaped and trimmed data
 					var user = new UserModel({
-						usename: req.body.usename,
+						username: req.body.username,
 						email: req.body.email,
 						password: hash,
 						callingcode: req.body.callingcode,
@@ -100,7 +100,7 @@ exports.register = [
 						let userData = {
 							_id: user._id,
 							email: user.email,
-							usename: user.usename,
+							username: user.username,
 							callingcode: user.callingcode,
 							phone: user.phone,
 							gender: user.gender,
